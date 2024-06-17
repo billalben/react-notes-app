@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { MdDeleteForever } from "react-icons/md";
 import ConfirmationModal from "./ConfirmationModal";
+import { FaClipboard, FaClipboardCheck } from "react-icons/fa";
 
 const Note = ({ id, text, date, handleDeleteNote }) => {
   const [showModal, setShowModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef(null);
 
   const handleDeleteClick = () => {
     setShowModal(true);
@@ -19,16 +22,45 @@ const Note = ({ id, text, date, handleDeleteNote }) => {
     setShowModal(false);
   };
 
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false);
+      }, 1000); // 1 second delay to revert the icon
+    });
+  };
+
+  // Clear the timeout when the component is unmounted
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="note">
-      <span>{text}</span>
+      <span className="desc">{text}</span>
       <div className="note-footer">
         <small>{date}</small>
-        <MdDeleteForever
-          onClick={handleDeleteClick}
-          className="delete-icon"
-          size="1.3em"
-        />
+        <div className="action-btn">
+          {copied ? (
+            <FaClipboardCheck className="clipboard-icon copied" size="1.3em" />
+          ) : (
+            <FaClipboard
+              onClick={handleCopyClick}
+              className="clipboard-icon"
+              size="1.3em"
+            />
+          )}
+          <MdDeleteForever
+            onClick={handleDeleteClick}
+            className="delete-icon"
+            size="1.5em"
+          />
+        </div>
       </div>
       {showModal && (
         <ConfirmationModal

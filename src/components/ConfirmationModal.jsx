@@ -7,17 +7,18 @@ const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
       <div className="modal-content">
         <div className="modal-header">
           <h2>Confirm</h2>
-          <MdClose
-            className="close-icon"
-            size={28}
-            style={{ cursor: "pointer" }}
-            onClick={onCancel}
-          />
+          <div className="close-icon" onClick={onCancel}>
+            <MdClose size={24} />
+          </div>
         </div>
         <p>{message}</p>
         <div className="modal-buttons">
-          <button onClick={onCancel}>Cancel</button>
-          <button onClick={onConfirm}>Confirm</button>
+          <button className="cancel" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="confirm" onClick={onConfirm}>
+            Confirm
+          </button>
         </div>
       </div>
     </div>

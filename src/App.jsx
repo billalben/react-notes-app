@@ -40,9 +40,8 @@ const App = () => {
 
   return (
     <div className={`${darkMode ? "dark-mode" : "light-mode"}`}>
-      <div className="container">
-        <Header handleToggleDarkMode={setDarkMode} />
-
+      <Header handleToggleDarkMode={setDarkMode} />
+      <div className="hero container">
         <Search handleSearchNote={setSearchText} />
 
         <NotesList
